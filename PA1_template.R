@@ -40,5 +40,33 @@
         ### FALSE  TRUE 
         ### 15264  2304
         
+## Filling in all missing values with the mean value of its 5-minute interval
+        fill.value <- function(steps, interval) {
+                filled <- NA
+                if (!is.na(steps))
+                        filled <- c(steps)
+                else
+                        filled <- (averages[averages$interval==interval, "steps"])
+                return(filled)
+        }
+        filled.data <- data
+        filled.data$steps <- mapply(fill.value, filled.data$steps, filled.data$interval)  
+       
+## Calculate the total steps taken per day with the NA filled in with mean value of its 5-minute interval        
+        total.steps <- tapply(filled.data$steps, filled.data$date, FUN=sum)
         
+        qplot(total.steps, binwidth=1000, xlab="total number of steps taken each day")
+        
+        ## Calculate the mean and median
+        mean(total.steps)
+        ### The mean is [1] 10766.19
+        median(total.steps)
+        ### The median is [1] 10766.19
+        ##
+        ### These values differ from the estimates from the first part of the assignment.
+        ### Imputing the missinf data caused the mean to be equal to the median
+        
+                                
+                                    
+                                    
         
