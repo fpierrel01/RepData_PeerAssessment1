@@ -66,7 +66,25 @@
         ### These values differ from the estimates from the first part of the assignment.
         ### Imputing the missinf data caused the mean to be equal to the median
         
+# Are there differences in activity pattern between weekdays and weekends?
+## Factor variable with two levels - "weekday" and "weekend".
+        weekday.or.weekend <- function(date) {
+                day <- weekdays(date)
+                if (day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))
+                        return("weekday")
+                else if (day %in% c("Saturday", "Sunday"))
+                        return("weekend")
+                else
+                        stop("invalid date")
+        }
+        filled.data$date <- as.Date(filled.data$date)
+        filled.data$day <- sapply(filled.data$date, FUN=weekday.or.weekend)
+        
                                 
-                                    
-                                    
+        ##Time series plot of 5 minute interval                                    
+        averages <- aggregate(steps ~ interval + day, data=filled.data, mean)
+        ggplot(averages, aes(interval, steps)) + geom_line() + facet_grid(day ~ .) +
+                xlab("5-minute interval") + ylab("Number of steps") 
+        
+        
         
